@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posting App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <i class="fas fa-heart"></i>
+                    Posting App
+                </h1>
+                <div class="user-info">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="User Avatar" class="user-avatar">
+                    <span class="user-name">John Doe</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Create Post Section -->
+            <section class="create-post-section">
+                <div class="create-post-card">
+                    <div class="post-input-container">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="postInput" 
+                                class="post-input" 
+                                placeholder="What's on your mind?"
+                                rows="4"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-actions-left">
+                            <div class="image-selector">
+                                <button class="image-picker-btn" onclick="toggleImagePicker()">
+                                    <i class="fas fa-image"></i>
+                                    Add Image
+                                </button>
+                            </div>
+                        </div>
+                        <button id="postBtn" class="post-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Post
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Posts Feed -->
+            <section class="posts-feed" id="postsFeed">
+                <!-- Posts will be dynamically added here -->
+            </section>
+        </main>
+    </div>
+
+    <!-- Image Picker Popup (Outside main container) -->
+    <div class="modal-overlay" id="imagePickerOverlay">
+        <div class="modal image-picker-modal">
+            <div class="modal-header">
+                <h3>Select Image</h3>
+                <button class="close-btn" onclick="toggleImagePicker()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="image-grid">
+                    <div class="image-option" data-image="" onclick="selectImage('')">
+                        <div class="no-image">
+                            <i class="fas fa-times"></i>
+                            <span>No Image</span>
+                        </div>
+                    </div>
+                    <div class="image-option" data-image="nature" onclick="selectImage('nature')">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=150&h=100&fit=crop" alt="Nature">
+                        <span>Nature</span>
+                    </div>
+                    <div class="image-option" data-image="city" onclick="selectImage('city')">
+                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=150&h=100&fit=crop" alt="City">
+                        <span>City</span>
+                    </div>
+                    <div class="image-option" data-image="beach" onclick="selectImage('beach')">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=150&h=100&fit=crop" alt="Beach">
+                        <span>Beach</span>
+                    </div>
+                    <div class="image-option" data-image="green" onclick="selectImage('green')">
+                        <img src="https://static.vecteezy.com/system/resources/thumbnails/049/547/631/small_2x/stunning-high-resolution-nature-and-landscape-backgrounds-breathtaking-scenery-in-hd-free-photo.jpg" alt="Mountains">
+                        <span>Green Nature</span>
+                    </div>
+                    <div class="image-option" data-image="forest" onclick="selectImage('forest')">
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=150&h=100&fit=crop" alt="Forest">
+                        <span>Forest</span>
+                    </div>
+                    <div class="image-option" data-image="ocean" onclick="selectImage('ocean')">
+                        <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=150&h=100&fit=crop" alt="Ocean">
+                        <span>Ocean</span>
+                    </div>
+                    <div class="image-option" data-image="sunset" onclick="selectImage('sunset')">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=150&h=100&fit=crop" alt="Sunset">
+                        <span>Sunset</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Modal -->
+    <div class="modal-overlay" id="commentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Comment</h3>
+                <button class="close-btn" onclick="closeCommentModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="comment-input-container">
+                    <input type="text" id="commentNameInput" class="comment-name-input" placeholder="Your name">
+                    <textarea id="commentInput" class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button class="comment-btn" onclick="addComment()">
+                        <i class="fas fa-comment"></i>
+                        Add Comment
+                    </button>
+                </div>
+                <div class="comments-list" id="commentsList">
+                    <!-- Comments will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Detail Modal -->
+    <div class="modal-overlay" id="postDetailModal">
+        <div class="modal post-detail-modal">
+            <div class="post-detail-header">
+                <button class="close-btn" onclick="closePostDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="post-detail-content">
+                <div class="post-detail-image-container">
+                    <img id="detailPostImage" class="post-detail-image" src="" alt="Post Image">
+                </div>
+                <div class="post-detail-sidebar">
+                    <div class="post-detail-header-info">
+                        <img id="detailUserAvatar" class="user-avatar" src="" alt="User Avatar">
+                        <div>
+                            <div id="detailPostAuthor" class="post-author"></div>
+                            <div id="detailPostTime" class="post-time"></div>
+                        </div>
+                    </div>
+                    <div id="detailPostText" class="post-detail-text"></div>
+                    <div class="post-detail-actions">
+                        <button class="action-btn" onclick="toggleLikeFromDetail()">
+                            <i class="fas fa-heart"></i>
+                            <span id="detailLikeCount">0</span>
+                        </button>
+                        <button class="action-btn" onclick="openCommentModalFromDetail()">
+                            <i class="fas fa-comment"></i>
+                            <span id="detailCommentCount">0</span>
+                        </button>
+                    </div>
+                    <div class="post-detail-comments" id="detailCommentsList">
+                        <!-- Detail comments will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
